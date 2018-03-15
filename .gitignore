@@ -1,0 +1,5 @@
+.idea/*
+.python-version
+**/__pycache__
+feed.xml
+*.log

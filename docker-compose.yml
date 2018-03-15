@@ -1,0 +1,68 @@
+version: "3"
+services: 
+  pgsqldb:
+    image: postgres:10.1
+    container_name: pgsqldb
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ms17010
+
+  scurss_web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    container_name: scurss_web
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./web/:/var/www/html/
+    depends_on:
+      - pgsqldb
+      - init_mail_server
+
+  mail_redis:
+    image: redis
+    container_name: mail_redis
+    restart: always
+
+  init_mail_server:
+    build: 
+      context: .
+      dockerfile: ./init_send/Dockerfile
+    container_name: init_mail_server
+    volumes:
+      - ./init_send:/app
+    depends_on:
+      - mail_redis
+      - pgsqldb
+    restart: always
+    environment:
+      EMAIL_USER: 'scurss@les1ie.com'
+      EMAIL_PASSWD: ""
+      MAIL_SERVER: "smtp.les1ie.com"
+      SENDER_NAME: "scurss@les1ie.com"
+
+  manage_python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: manage_python
+    volumes:
+      - .:/scurss
+      - ./bin/:/usr/bin/
+    working_dir: /scurss
+    restart: always
+    environment:
+      EMAIL_USER: 'scurss@les1ie.com'
+      EMAIL_PASSWD: ""
+      MAIL_SERVER: "smtp.les1ie.com"
+      SENDER_NAME: "scurss@les1ie.com"
+    depends_on:
+      - mail_redis
+      - pgsqldb
+    command: ["./wait-for-it.sh", "pgsqldb:5432", "--", "python", "manage.py"]
+
+
+
+
