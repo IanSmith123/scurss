@@ -4,6 +4,8 @@ services:
     image: postgres:10.1
     container_name: pgsqldb
     restart: always
+    #    ports:
+    #  - "5432:5432"
     environment:
       POSTGRES_PASSWORD: ms17010
 
@@ -39,7 +41,7 @@ services:
     restart: always
     environment:
       EMAIL_USER: 'scurss@les1ie.com'
-      EMAIL_PASSWD: ""
+      EMAIL_PASSWD: "9vU2yJ6V52vg"
       MAIL_SERVER: "smtp.les1ie.com"
       SENDER_NAME: "scurss@les1ie.com"
 
@@ -50,18 +52,17 @@ services:
     container_name: manage_python
     volumes:
       - .:/scurss
-      - ./bin/:/usr/bin/
     working_dir: /scurss
     restart: always
     environment:
       EMAIL_USER: 'scurss@les1ie.com'
-      EMAIL_PASSWD: ""
+      EMAIL_PASSWD: "9vU2yJ6V52vg"
       MAIL_SERVER: "smtp.les1ie.com"
       SENDER_NAME: "scurss@les1ie.com"
     depends_on:
       - mail_redis
       - pgsqldb
-    command: ["./wait-for-it.sh", "pgsqldb:5432", "--", "python", "manage.py"]
+    command: ["./wait-for-it.sh", "pgsqldb:5432", "--", "python3", "manage.py"]
 
 
 

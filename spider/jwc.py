@@ -17,7 +17,7 @@ class JwcSpider:
         self.url = "http://jwc.scu.edu.cn/jwc/frontPage.action"
         # self.driver = self.init_phantom_driver()
         # self.driver = self.init_chrome_driver()
-        # self.driver = self.init_firefox_driver()
+        self.driver = self.init_firefox_driver()
 
     def init_chrome_driver(self):
         options = webdriver.ChromeOptions()
@@ -60,7 +60,6 @@ class JwcSpider:
         return self.driver.page_source
 
     def crawl(self):
-        return
         """
         用到时间的地方一律采用时间戳的方式存储
 
