@@ -307,4 +307,5 @@ def main():
 if __name__ == '__main__':
     main()
     print("一次工作完成", arrow.now('Asia/Shanghai').format("YYYY-MM-DD HH:mm:ss"))
-    time.sleep(60*60*2)
+    to_next_morning = arrow.get(arrow.now().shift(days=1).format("YYYY-MM-DD")+" 19:00:00").timestamp - arrow.now().timestamp
+    time.sleep(to_next_morning)
